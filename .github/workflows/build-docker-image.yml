@@ -24,7 +24,7 @@ jobs:
               repo: 'switch-lan-play'
             })).data;
             if (releases.length > 0) {
-              return releases[0].name;
+              return releases[0].name.replace('v', '');
             }
             return '';          
             
