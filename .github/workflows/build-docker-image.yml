@@ -23,11 +23,15 @@ jobs:
               owner: 'spacemeowx2',
               repo: 'switch-lan-play'
             })).data;
-            return releases[0].name;          
+            if (releases.length > 0) {
+              return releases[0].name;
+            }
+            return '';          
             
       - name: Check switch-lan-play local version
         uses: actions/github-script@v3
         id: get_local_version
+        if: steps.get_latest_version.outputs.result != ''
         with:
           github-token: ${{ github.token }}
           result-encoding: string
@@ -50,7 +54,7 @@ jobs:
       
       - name: Create tag
         uses: actions/github-script@v3
-        if: steps.get_latest_version.outputs.result != steps.get_local_version.outputs.result
+        if: steps.get_latest_version.outputs.result != '' && steps.get_local_version.outputs.result != '' && steps.get_latest_version.outputs.result != steps.get_local_version.outputs.result
         with:
           github-token: ${{ github.token }}
           script: |
@@ -64,7 +68,7 @@ jobs:
       - name: Get code url
         id: get_code_url
         uses: actions/github-script@v3
-        if: steps.get_latest_version.outputs.result != steps.get_local_version.outputs.result
+        if: steps.get_latest_version.outputs.result != '' && steps.get_local_version.outputs.result != '' && steps.get_latest_version.outputs.result != steps.get_local_version.outputs.result
         with:
           github-token: ${{ github.token }}
           result-encoding: string
